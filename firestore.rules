@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the document
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Projects collection rules
+    match /projects/{projectId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+      allow update: if isAuthenticated() && isOwner(resource.data.userId);
+      allow delete: if isAuthenticated() && isOwner(resource.data.userId);
+    }
+
+    // Todos collection rules
+    match /todos/{todoId} {
+      allow read: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/projects/$(resource.data.projectId)) &&
+        isOwner(get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.userId);
+      
+      allow create: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/projects/$(request.resource.data.projectId)) &&
+        isOwner(get(/databases/$(database)/documents/projects/$(request.resource.data.projectId)).data.userId);
+      
+      allow update: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/projects/$(resource.data.projectId)) &&
+        isOwner(get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.userId);
+      
+      allow delete: if isAuthenticated() && 
+        exists(/databases/$(database)/documents/projects/$(resource.data.projectId)) &&
+        isOwner(get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.userId);
+    }
+  }
+} 
