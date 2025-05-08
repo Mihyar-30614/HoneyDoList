@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "honeydos"
+    "default": "honeydos-84e3d"
   },
   "hosting": {
     "source": ".",
@@ -11,7 +11,7 @@
     ],
     "github": {
       "repo": "Mihyar-30614/HoneyDos",
-      "branch": "main"
+      "branch": "master"
     }
   }
 }
