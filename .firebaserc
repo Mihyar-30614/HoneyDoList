@@ -1,5 +1,17 @@
 {
   "projects": {
-    "default": "honeydos-84e3d"
+    "default": "honeydos"
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "github": {
+      "repo": "Mihyar-30614/HoneyDos",
+      "branch": "main"
+    }
   }
 }
